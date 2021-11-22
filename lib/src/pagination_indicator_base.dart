@@ -9,18 +9,22 @@ class PaginationIndicator extends StatefulWidget {
     this.unselectedColor = Colors.grey,
     this.visiblePageCount = 5,
     required this.onPageChanged,
+    required this.pageCount,
+    this.initialValue = 1,
   }) : super(key: key);
   final Color selectedColor;
   final Color unselectedColor;
   final int visiblePageCount;
   final ValueChanged<int> onPageChanged;
+  final int pageCount;
+  final int initialValue;
 
   @override
   _PaginationIndicatorState createState() => _PaginationIndicatorState();
 }
 
 class _PaginationIndicatorState extends State<PaginationIndicator> {
-  int pageCount = 20;
+  late int pageCount;
   int selectedPage = 1;
   late List<bool> _selectedPageList;
   late ScrollController _controller;
@@ -29,6 +33,8 @@ class _PaginationIndicatorState extends State<PaginationIndicator> {
   void initState() {
     super.initState();
     _controller = ScrollController();
+    pageCount = widget.pageCount;
+    selectedPage = widget.initialValue;
 
     _selectedPageList = List.generate(
       pageCount,
@@ -46,10 +52,8 @@ class _PaginationIndicatorState extends State<PaginationIndicator> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        // pages
-        const SizedBox(width: 8),
         SizedBox(
-          width: (48 * widget.visiblePageCount) + widget.visiblePageCount + 1,
+          width: _getWidth(),
           height: 48,
           child: ListView(
             controller: _controller,
@@ -69,10 +73,13 @@ class _PaginationIndicatorState extends State<PaginationIndicator> {
             ],
           ),
         ),
-        const SizedBox(width: 8),
       ],
     );
   }
+
+  double _getWidth() => widget.pageCount <= widget.visiblePageCount
+      ? (48 * widget.pageCount) + widget.pageCount + 1
+      : (48 * widget.visiblePageCount) + widget.visiblePageCount + 1;
 
   void _onPressed(int index) {
     selectedPage = index + 1;
