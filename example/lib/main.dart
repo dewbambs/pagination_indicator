@@ -27,10 +27,19 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: PaginationIndicator(
-          onPageChanged: (index) {
-            print("page count is $index");
-          },
+        child: Row(
+          children: [
+            Text("data"),
+            PaginationIndicator(
+              onPageChanged: (index) {
+                print("page count is $index");
+              },
+              initialValue: 5,
+              pageCount: 6,
+              visiblePageCount: 5,
+            ),
+            Text("data")
+          ],
         ),
       ),
     );
